@@ -1,9 +1,22 @@
-import { Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { CreateUserAccessControlListService } from './CreateUserAccessControlList.service';
 
-export interface IGetUserAuthInfoRequest extends Request {
+interface IGetUserAuthInfoRequest extends Request {
   userId: string; // or any other type
+}
+
+interface ICreateUserAccessControlListDto {
+  permissions: [];
+  roles: [];
 }
 
 @Controller()
@@ -13,10 +26,12 @@ export class CreateUserAccessControlListController {
   ) {}
 
   @Post('/users/acl')
-  async handle(request: IGetUserAuthInfoRequest, response: Response) {
-    const { permissions, roles } = request.body;
-    const { userId } = request;
-
+  @HttpCode(HttpStatus.CREATED)
+  async handle(
+    @Body() { permissions, roles }: ICreateUserAccessControlListDto,
+    @Req() { userId }: IGetUserAuthInfoRequest,
+    @Res() res: Response,
+  ) {
     const result = await this.createUserACLService.execute({
       userId,
       permissions,
@@ -24,9 +39,9 @@ export class CreateUserAccessControlListController {
     });
 
     if (result instanceof Error) {
-      return response.status(400).json(result.message);
+      return res.status(HttpStatus.BAD_REQUEST).json(result.message);
     }
 
-    return response.json(result);
+    return res.json(result);
   }
 }

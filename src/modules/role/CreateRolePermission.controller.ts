@@ -1,6 +1,18 @@
-import { Controller, Post } from '@nestjs/common';
-import { Request, Response } from 'express';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { CreateRolePermissionService } from './CreateRolePermission.service';
+
+interface IRolePermissionDto {
+  permissions: [];
+}
 
 @Controller()
 export class CreateRolePermissionController {
@@ -9,19 +21,21 @@ export class CreateRolePermissionController {
   ) {}
 
   @Post('/roles/:roleId')
-  async handle(request: Request, response: Response) {
-    const { roleId } = request.params;
-    const { permissions } = request.body;
-
+  @HttpCode(HttpStatus.CREATED)
+  async handle(
+    @Param('roleId') roleId: string,
+    @Body() { permissions }: IRolePermissionDto,
+    @Res() res: Response,
+  ) {
     const result = await this.createRolePermissionService.execute({
       roleId,
       permissions,
     });
 
     if (result instanceof Error) {
-      return response.status(400).json(result.message);
+      return res.status(HttpStatus.BAD_REQUEST).json(result.message);
     }
 
-    return response.json(result);
+    return res.json(result);
   }
 }

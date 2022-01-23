@@ -1,21 +1,35 @@
-import { Controller, Post } from '@nestjs/common';
-import { Request, Response } from 'express';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { CreateUserService } from './CreateUser.service';
+
+interface ICreateUserDto {
+  username: string;
+  password: string;
+}
 
 @Controller()
 export class CreateUserController {
   constructor(private readonly createUserService: CreateUserService) {}
 
   @Post('users')
-  async handle(request: Request, response: Response) {
-    const { username, password } = request.body;
-
+  @HttpCode(HttpStatus.CREATED)
+  async handle(
+    @Body() { username, password }: ICreateUserDto,
+    @Res() res: Response,
+  ) {
     const result = await this.createUserService.execute({ username, password });
 
     if (result instanceof Error) {
-      return response.status(400).json(result.message);
+      return res.status(HttpStatus.BAD_REQUEST).json(result.message);
     }
 
-    return response.json(result);
+    return res.json(result);
   }
 }

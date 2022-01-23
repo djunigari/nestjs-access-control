@@ -1,16 +1,25 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { CreateRoleService } from './CreateRole.service';
 
 interface ICreateRoleDto {
   name: string;
   description: string;
 }
+
 @Controller()
 export class CreateRoleController {
   constructor(private readonly createRoleService: CreateRoleService) {}
 
   @Post('/roles')
+  @HttpCode(HttpStatus.CREATED)
   async handle(
     @Body() { name, description }: ICreateRoleDto,
     @Res() res: Response,
@@ -20,6 +29,7 @@ export class CreateRoleController {
     if (result instanceof Error) {
       return res.status(HttpStatus.BAD_REQUEST).json(result.message);
     }
-    return res.status(HttpStatus.CREATED).json(result);
+
+    return res.json(result);
   }
 }

@@ -1,6 +1,18 @@
-import { Controller, Post } from '@nestjs/common';
-import { Request, Response } from 'express';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { CreatePermissionService } from './CreatePermission.service';
+
+interface ICreatePermissionDto {
+  name: string;
+  description: string;
+}
 
 @Controller()
 export class CreatePermissionController {
@@ -9,18 +21,20 @@ export class CreatePermissionController {
   ) {}
 
   @Post('/permissions')
-  async handle(request: Request, response: Response) {
-    const { name, description } = request.body;
-
+  @HttpCode(HttpStatus.CREATED)
+  async handle(
+    @Body() { name, description }: ICreatePermissionDto,
+    @Res() res: Response,
+  ) {
     const result = await this.createPermissionService.execute({
       name,
       description,
     });
 
     if (result instanceof Error) {
-      return response.status(400).json(result.message);
+      return res.status(HttpStatus.BAD_REQUEST).json(result.message);
     }
 
-    return response.json(result);
+    return res.json(result);
   }
 }
