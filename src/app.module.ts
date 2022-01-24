@@ -9,6 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { PermissionGuard } from './auth/permissions.guard';
 import { RolesModule } from './modules/roles/roles.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [

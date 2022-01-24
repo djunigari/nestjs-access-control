@@ -8,29 +8,25 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { CreateUserAccessControlListService } from './CreateUserAccessControlList.service';
+import { SetUserRolesService } from '../services/SetUserRoles.service';
 
 interface ICreateUserAccessControlListDto {
-  permissions: [];
   roles: [];
 }
 
 @Controller()
-export class CreateUserAccessControlListController {
-  constructor(
-    private readonly createUserACLService: CreateUserAccessControlListService,
-  ) {}
+export class SetUserRolesController {
+  constructor(private readonly service: SetUserRolesService) {}
 
-  @Post('/users/acl')
+  @Post('/users/roles')
   @HttpCode(HttpStatus.CREATED)
   async handle(
-    @Body() { permissions, roles }: ICreateUserAccessControlListDto,
+    @Body() { roles }: ICreateUserAccessControlListDto,
     @Request() { userId },
     @Res() res: Response,
   ) {
-    const result = await this.createUserACLService.execute({
+    const result = await this.service.execute({
       userId,
-      permissions,
       roles,
     });
 
