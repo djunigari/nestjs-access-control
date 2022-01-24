@@ -8,16 +8,13 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { CreateRolePermissionService } from './CreateRolePermission.service';
-
-interface IRolePermissionDto {
-  permissions: [];
-}
+import { IRolePermissionDto } from '../dto/create-role-permission.dto';
+import { SetRolePermissionsService } from '../services/SetRolePermissions.service';
 
 @Controller()
-export class CreateRolePermissionController {
+export class SetRolePermissionsController {
   constructor(
-    private readonly createRolePermissionService: CreateRolePermissionService,
+    private readonly createRolePermissionService: SetRolePermissionsService,
   ) {}
 
   @Post('/roles/:roleId')

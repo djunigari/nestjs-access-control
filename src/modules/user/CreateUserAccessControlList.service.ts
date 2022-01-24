@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Role } from 'src/entities/Role.entity';
 import { User } from 'src/entities/User.entity';
+import { Role } from 'src/modules/roles/entities/role.entity';
 import { Repository } from 'typeorm';
 
 type UserACLRequest = {

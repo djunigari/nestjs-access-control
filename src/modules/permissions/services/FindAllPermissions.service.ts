@@ -1,18 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Permission } from '../entities/permission.entity';
+import { BasePermissionService } from './BasePermission.service';
 
 @Injectable()
-export class FindAllPermissionsService {
-  constructor(
-    @InjectRepository(Permission)
-    private permissionsRepository: Repository<Permission>,
-  ) {}
-
+export class FindAllPermissionsService extends BasePermissionService {
   async execute(): Promise<Permission[] | Error> {
-    const permissions = this.permissionsRepository.find();
-
-    return permissions;
+    return await this.repo().find();
   }
 }
