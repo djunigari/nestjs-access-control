@@ -7,6 +7,8 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { Permission } from '../permissions/entities/permission.enum';
+import { RequirePermissions } from '../../auth/permissions.decorator';
 import { CreateUserService } from './CreateUser.service';
 
 interface ICreateUserDto {
@@ -19,6 +21,7 @@ export class CreateUserController {
   constructor(private readonly createUserService: CreateUserService) {}
 
   @Post('users')
+  @RequirePermissions(Permission.CREATE_USER)
   @HttpCode(HttpStatus.CREATED)
   async handle(
     @Body() { username, password }: ICreateUserDto,

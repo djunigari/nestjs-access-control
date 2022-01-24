@@ -1,12 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Permission } from 'src/entities/Permission.entity';
 import { Repository } from 'typeorm';
-
-type PermissionRequest = {
-  name: string;
-  description: string;
-};
+import { ICreatePermissionDto } from '../dto/create-permission.dto';
+import { Permission } from '../entities/permission.entity';
 
 @Injectable()
 export class CreatePermissionService {
@@ -18,7 +14,7 @@ export class CreatePermissionService {
   async execute({
     name,
     description,
-  }: PermissionRequest): Promise<Permission | Error> {
+  }: ICreatePermissionDto): Promise<Permission | Error> {
     if (await this.permissionsRepository.findOne({ name })) {
       return new Error('Permission already exists');
     }

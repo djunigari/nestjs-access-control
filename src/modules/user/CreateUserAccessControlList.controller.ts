@@ -4,15 +4,11 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Req,
+  Request,
   Res,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { CreateUserAccessControlListService } from './CreateUserAccessControlList.service';
-
-interface IGetUserAuthInfoRequest extends Request {
-  userId: string; // or any other type
-}
 
 interface ICreateUserAccessControlListDto {
   permissions: [];
@@ -29,7 +25,7 @@ export class CreateUserAccessControlListController {
   @HttpCode(HttpStatus.CREATED)
   async handle(
     @Body() { permissions, roles }: ICreateUserAccessControlListDto,
-    @Req() { userId }: IGetUserAuthInfoRequest,
+    @Request() { userId },
     @Res() res: Response,
   ) {
     const result = await this.createUserACLService.execute({
