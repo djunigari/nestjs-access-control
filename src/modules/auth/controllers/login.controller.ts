@@ -4,6 +4,7 @@ import { RequirePermissions } from '../Guards/permissions.decorator';
 import { LoginService } from '../services/Login.service';
 import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
 import { LocalAuthGuard } from '../Guards/local-auth.guard';
+import { PermissionGuard } from '../Guards/permissions.guard';
 
 @Controller()
 export class LoginController {
@@ -15,8 +16,8 @@ export class LoginController {
     return this.loginService.execute(user);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('profile')
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @RequirePermissions(Permission.READ_USER)
   getProfile(@Request() { user }) {
     return user;

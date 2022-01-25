@@ -19,13 +19,7 @@ import { PermissionGuard } from './modules/auth/Guards/permissions.guard';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_GUARD,
-      useClass: PermissionGuard,
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule {
   constructor(private connection: Connection) {}

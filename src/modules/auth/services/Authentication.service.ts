@@ -6,7 +6,11 @@ import { BaseUserService } from '../../users/services/BaseUser.service';
 @Injectable()
 export class AuthenticationService extends BaseUserService {
   async execute(username: string, password: string): Promise<User | Error> {
-    const user = await this.repo().findOne({ username });
+    const user = await this.repo().findOne({
+      where: { username },
+      relations: ['roles'],
+    });
+
     if (user && (await compare(password, user.password))) {
       delete user.password;
       return user;

@@ -11,6 +11,7 @@ import { Role } from './entities/role.entity';
 import { BaseRoleService } from './services/BaseRole.service';
 import { CreateRoleService } from './services/CreateRole.service';
 import { DeleteRoleService } from './services/DeleteRole.service';
+import { FindAllPermissionsByRoleNamesService } from './services/FindAllPermissionsByRoleNames.service';
 import { FindAllRolesService } from './services/FindAllRole.service';
 import { FindRoleByIdService } from './services/FindRoleById.service';
 import { SetRolePermissionsService } from './services/SetRolePermissions.service';
@@ -34,7 +35,8 @@ import { UpdateRoleService } from './services/UpdateRole.service';
     UpdateRoleService,
     FindAllRolesService,
     FindRoleByIdService,
+    FindAllPermissionsByRoleNamesService,
   ],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, FindAllPermissionsByRoleNamesService],
 })
 export class RolesModule {}

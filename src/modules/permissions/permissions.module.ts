@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RolesModule } from '../roles/roles.module';
 import { CreatePermissionController } from './controllers/CreatePermission.controller';
 import { DeletePermissionController } from './controllers/DeletePermission.controller';
 import { FindAllPermissionsController } from './controllers/FindAllPermissions.controller';
