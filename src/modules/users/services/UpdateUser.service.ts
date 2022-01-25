@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { IUpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
 import { BaseUserService } from './BaseUser.service';
 
@@ -6,7 +7,7 @@ import { BaseUserService } from './BaseUser.service';
 export class UpdateUserService extends BaseUserService {
   async execute(
     userId: string,
-    { name, description }: IUpdateUserDto,
+    { username, password }: IUpdateUserDto,
   ): Promise<User | Error> {
     const User = await this.repo().findOne(userId);
 
@@ -16,8 +17,8 @@ export class UpdateUserService extends BaseUserService {
 
     return await this.repo().save({
       id: userId,
-      name,
-      description,
+      username,
+      password,
     });
   }
 }

@@ -17,7 +17,7 @@ export class SetRolePermissionsController {
     private readonly createRolePermissionService: SetRolePermissionsService,
   ) {}
 
-  @Post('/roles/:roleId')
+  @Post('/role/:roleId/permissions')
   @HttpCode(HttpStatus.CREATED)
   async handle(
     @Param('roleId') roleId: string,

@@ -3,6 +3,7 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Request,
   Res,
@@ -18,11 +19,11 @@ interface ICreateUserAccessControlListDto {
 export class SetUserRolesController {
   constructor(private readonly service: SetUserRolesService) {}
 
-  @Post('/users/roles')
+  @Post('/user/:userId/roles')
   @HttpCode(HttpStatus.CREATED)
   async handle(
+    @Param('userId') userId: string,
     @Body() { roles }: ICreateUserAccessControlListDto,
-    @Request() { userId },
     @Res() res: Response,
   ) {
     const result = await this.service.execute({
