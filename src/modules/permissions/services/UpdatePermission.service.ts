@@ -7,7 +7,7 @@ import { BasePermissionService } from './BasePermission.service';
 export class UpdatePermissionService extends BasePermissionService {
   async execute(
     permissionId: string,
-    { name, description }: IUpdatePermissionDto,
+    { action, subject }: IUpdatePermissionDto,
   ): Promise<Permission | Error> {
     const permission = await this.repo().findOne(permissionId);
 
@@ -17,8 +17,8 @@ export class UpdatePermissionService extends BasePermissionService {
 
     return await this.repo().save({
       id: permissionId,
-      name,
-      description,
+      action,
+      subject,
     });
   }
 }

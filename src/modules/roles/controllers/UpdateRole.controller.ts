@@ -8,8 +8,6 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { RequirePermissions } from 'src/modules/auth/Guards/permissions.decorator';
-import { Permission } from 'src/modules/permissions/entities/permission.enum';
 import { IUpdateRoleDto } from '../dto/update-role.dto';
 import { UpdateRoleService } from '../services/UpdateRole.service';
 
@@ -18,7 +16,6 @@ export class UpdateRoleController {
   constructor(private readonly service: UpdateRoleService) {}
 
   @Patch('role/:id')
-  @RequirePermissions(Permission.EDIT_ROLE)
   @HttpCode(HttpStatus.CREATED)
   async execute(
     @Param('id') id: string,

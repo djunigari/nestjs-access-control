@@ -1,34 +1,35 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Permission } from 'src/modules/permissions/entities/permission.enum';
-import { FindAllPermissionsByRoleNamesService } from 'src/modules/roles/services/FindAllPermissionsByRoleNames.service';
-import { PERMISSIONS_KEY } from './permissions.decorator';
+import { AppAbility, CaslAbilityFactory } from '../casl/casl-ability.factory';
+import {
+  PERMISSION_CHECKER_KEY,
+  RequiredPermission,
+} from './permissions.decorator';
 
 @Injectable()
-export class PermissionGuard implements CanActivate {
+export class PermissionsGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private service: FindAllPermissionsByRoleNamesService,
+    private abilityFactory: CaslAbilityFactory,
   ) {}
 
-  async canActivate(context: ExecutionContext) {
-    const requiredPermissions = this.reflector.getAllAndOverride<Permission[]>(
-      PERMISSIONS_KEY,
-      [context.getHandler(), context.getClass()],
-    );
-    if (!requiredPermissions) {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const noAuth = this.reflector.get<boolean>('no-auth', context.getHandler());
+    if (noAuth) {
       return true;
     }
-    const { user } = context.switchToHttp().getRequest();
-    if (!user) {
-      return false;
-    }
+    const requiredPermissions =
+      this.reflector.get<RequiredPermission[]>(
+        PERMISSION_CHECKER_KEY,
+        context.getHandler(),
+      ) || [];
+    const req = context.switchToHttp().getRequest();
+    const user = req.user;
+    const ability = await this.abilityFactory.createForUser(user);
+    return requiredPermissions.every((rule) => this.isAllowed(ability, rule));
+  }
 
-    const result = await this.service.execute(user.roles);
-    const permissions = result.map((permission) => permission.name);
-    console.log(permissions);
-    return requiredPermissions.some((permission) =>
-      permissions.includes(permission),
-    );
+  private isAllowed(ability: AppAbility, rule: RequiredPermission): boolean {
+    return ability.can(...rule);
   }
 }

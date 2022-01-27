@@ -11,6 +11,7 @@ import { User } from './entities/user.entity';
 import { BaseUserService } from './services/BaseUser.service';
 import { CreateUserService } from './services/CreateUser.service';
 import { DeleteUserService } from './services/DeleteUser.service';
+import { FindAllPermissionsOfUserByIdService } from './services/FindAllPermissionsOfUserById.service';
 import { FindAllUsersService } from './services/FindAllUsers.service';
 import { FindUserByIdService } from './services/FindUserById.service';
 import { SetUserRolesService } from './services/SetUserRoles.service';
@@ -34,7 +35,8 @@ import { UpdateUserService } from './services/UpdateUser.service';
     FindAllUsersService,
     FindUserByIdService,
     SetUserRolesService,
+    FindAllPermissionsOfUserByIdService,
   ],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, FindAllPermissionsOfUserByIdService],
 })
 export class UsersModule {}

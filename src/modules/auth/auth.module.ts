@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { RolesModule } from '../roles/roles.module';
 import { UsersModule } from '../users/users.module';
+import { CaslAbilityFactory } from './casl/casl-ability.factory';
 import { jwtConstants } from './constants';
 import { LoginController } from './controllers/login.controller';
 import { AuthenticationService } from './services/Authentication.service';
@@ -20,8 +21,14 @@ import { LocalStrategy } from './strategies/local.strategy';
       signOptions: { expiresIn: '1h' },
     }),
   ],
-  providers: [LoginService, LocalStrategy, JwtStrategy, AuthenticationService],
+  providers: [
+    LoginService,
+    LocalStrategy,
+    JwtStrategy,
+    AuthenticationService,
+    CaslAbilityFactory,
+  ],
   controllers: [LoginController],
-  exports: [],
+  exports: [CaslAbilityFactory],
 })
 export class AuthModule {}

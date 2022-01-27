@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { FindAllUsersService } from '../services/FindAllUsers.service';
 
@@ -7,7 +7,6 @@ export class FindAllUsersController {
   constructor(private readonly service: FindAllUsersService) {}
 
   @Get('users')
-  @HttpCode(HttpStatus.FOUND)
   async handle(@Res() res: Response) {
     const result = await this.service.execute();
     if (result instanceof Error) {

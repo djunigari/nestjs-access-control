@@ -1,4 +1,7 @@
+import { Action } from '../entities/actions.enum';
+import { Subject } from '../entities/subjects.enum';
+
 export interface ICreatePermissionDto {
-  name: string;
-  description: string;
+  action: Action;
+  subject: Subject;
 }

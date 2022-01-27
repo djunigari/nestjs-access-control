@@ -8,7 +8,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { UsersModule } from './modules/users/users.module';
-import { PermissionGuard } from './modules/auth/Guards/permissions.guard';
+import { JwtAuthGuard } from './modules/auth/Guards/jwt-auth.guard';
+import { PermissionsGuard } from './modules/auth/Guards/permissions.guard';
 
 @Module({
   imports: [
@@ -19,7 +20,17 @@ import { PermissionGuard } from './modules/auth/Guards/permissions.guard';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionsGuard,
+    },
+  ],
 })
 export class AppModule {
   constructor(private connection: Connection) {}

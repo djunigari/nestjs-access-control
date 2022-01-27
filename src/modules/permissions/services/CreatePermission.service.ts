@@ -6,14 +6,14 @@ import { BasePermissionService } from './BasePermission.service';
 @Injectable()
 export class CreatePermissionService extends BasePermissionService {
   async execute({
-    name,
-    description,
+    action,
+    subject,
   }: ICreatePermissionDto): Promise<Permission | Error> {
-    if (await this.repo().findOne({ name })) {
+    if (await this.repo().findOne({ action, subject })) {
       return new Error('Permission already exists');
     }
 
-    const permission = this.repo().create({ name, description });
+    const permission = this.repo().create({ action, subject });
 
     await this.repo().save(permission);
 
