@@ -7,7 +7,10 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { CheckPermissions } from 'src/modules/auth/Guards/permissions.decorator';
 import { ICreatePermissionDto } from '../dto/create-permission.dto';
+import { Action } from '../entities/actions.enum';
+import { Subject } from '../entities/subjects.enum';
 import { CreatePermissionService } from '../services/CreatePermission.service';
 
 @Controller()
@@ -15,7 +18,7 @@ export class CreatePermissionController {
   constructor(private readonly service: CreatePermissionService) {}
 
   @Post('permission')
-  @HttpCode(HttpStatus.CREATED)
+  @CheckPermissions([Action.CREATE, Subject.USER])
   async handle(
     @Body() createPermissionDto: ICreatePermissionDto,
     @Res() res: Response,

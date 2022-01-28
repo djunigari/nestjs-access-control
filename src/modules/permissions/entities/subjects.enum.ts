@@ -1,3 +1,4 @@
 export enum Subject {
-  USER = 'User',
+  ALL = 'all',
+  USER = 'user',
 }

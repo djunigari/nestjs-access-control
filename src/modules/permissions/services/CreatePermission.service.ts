@@ -12,7 +12,7 @@ export class CreatePermissionService extends BasePermissionService {
     if (await this.repo().findOne({ action, subject })) {
       return new Error('Permission already exists');
     }
-
+    console.log(subject);
     const permission = this.repo().create({ action, subject });
 
     await this.repo().save(permission);

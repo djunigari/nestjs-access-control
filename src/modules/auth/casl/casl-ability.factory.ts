@@ -20,14 +20,13 @@ export class CaslAbilityFactory {
     private readonly findAllPermissionsOfUserService: FindAllPermissionsOfUserByIdService,
   ) {}
   async createForUser(user: User): Promise<AppAbility> {
-    console.log('chamando function createForUser');
-
     const dbPermissions: Permission[] =
       await this.findAllPermissionsOfUserService.execute(user.id);
     const caslPermissions: CaslPermission[] = dbPermissions.map((p) => ({
       action: p.action,
       subject: p.subject,
     }));
+
     return new Ability<[Action, PermissionObjectType]>(caslPermissions);
   }
 }
