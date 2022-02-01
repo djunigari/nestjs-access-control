@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AppAbility, CaslAbilityFactory } from '../casl/casl-ability.factory';
+import { CaslAbilityFactory } from '../casl/casl-ability.factory';
 import {
   PERMISSION_CHECKER_KEY,
   RequiredPermission,
@@ -26,10 +26,6 @@ export class PermissionsGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
     const user = req.user;
     const ability = await this.abilityFactory.createForUser(user);
-    return requiredPermissions.every((rule) => this.isAllowed(ability, rule));
-  }
-
-  private isAllowed(ability: AppAbility, rule: RequiredPermission): boolean {
-    return ability.can(...rule);
+    return requiredPermissions.every((rule) => ability.can(...rule));
   }
 }

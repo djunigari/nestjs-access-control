@@ -1,32 +1,24 @@
-import { Ability } from '@casl/ability';
+import { Ability, defineAbility } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { Permission } from 'src/modules/permissions/entities/permission.entity';
 import { Action } from 'src/modules/permissions/entities/actions.enum';
 import { User } from 'src/modules/users/entities/user.entity';
 import { FindAllPermissionsOfUserByIdService } from 'src/modules/users/services/FindAllPermissionsOfUserById.service';
-import { Subject } from 'src/modules/permissions/entities/subjects.enum';
 
 export type PermissionObjectType = any;
-export type AppAbility = Ability<[Action, PermissionObjectType]>;
-interface CaslPermission {
-  action: Action;
-  // In our database, Invoice, Project... are called "object"
-  // but in CASL they are called "subject"
-  subject: Subject;
-}
+
 @Injectable()
 export class CaslAbilityFactory {
   constructor(
-    private readonly findAllPermissionsOfUserService: FindAllPermissionsOfUserByIdService,
+    private readonly findAllUserPermissions: FindAllPermissionsOfUserByIdService,
   ) {}
-  async createForUser(user: User): Promise<AppAbility> {
-    const dbPermissions: Permission[] =
-      await this.findAllPermissionsOfUserService.execute(user.id);
-    const caslPermissions: CaslPermission[] = dbPermissions.map((p) => ({
-      action: p.action,
-      subject: p.subject,
-    }));
-
-    return new Ability<[Action, PermissionObjectType]>(caslPermissions);
+  async createForUser(user: User): Promise<Ability> {
+    const permissions = await this.findAllUserPermissions.execute(user.id);
+    return defineAbility((can) => {
+      //fix later to use database with field conditions
+      can(Action.READ, 'User', { id: user.id });
+      permissions.map((permission) =>
+        can(permission.action, permission.subject),
+      );
+    });
   }
 }

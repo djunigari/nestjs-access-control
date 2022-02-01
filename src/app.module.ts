@@ -8,8 +8,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { UsersModule } from './modules/users/users.module';
-import { JwtAuthGuard } from './modules/auth/Guards/jwt-auth.guard';
-import { PermissionsGuard } from './modules/auth/Guards/permissions.guard';
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 
 @Module({
   imports: [

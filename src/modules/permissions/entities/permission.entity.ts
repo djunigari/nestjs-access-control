@@ -16,4 +16,7 @@ export class Permission extends BaseEntity {
     enum: Subject,
   })
   subject: Subject;
+
+  @Column()
+  condition: string;
 }

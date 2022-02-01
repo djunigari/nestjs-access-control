@@ -7,7 +7,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { CheckPermissions } from 'src/modules/auth/Guards/permissions.decorator';
+import { CheckPermissions } from 'src/modules/auth/guards/permissions.decorator';
 import { ICreatePermissionDto } from '../dto/create-permission.dto';
 import { Action } from '../entities/actions.enum';
 import { Subject } from '../entities/subjects.enum';

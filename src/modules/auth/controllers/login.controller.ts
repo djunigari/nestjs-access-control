@@ -1,14 +1,24 @@
-import { Controller, Request, Post, UseGuards, Get } from '@nestjs/common';
+import {
+  Controller,
+  Request,
+  Post,
+  UseGuards,
+  Get,
+  ForbiddenException,
+} from '@nestjs/common';
 import { LoginService } from '../services/Login.service';
 import { LocalAuthGuard } from '../Guards/local-auth.guard';
-import { CheckPermissions } from '../Guards/permissions.decorator';
 import { Action } from 'src/modules/permissions/entities/actions.enum';
-import { Subject } from 'src/modules/permissions/entities/subjects.enum';
 import { NoAuth } from '../Guards/noauth.decorator';
+import { CaslAbilityFactory } from '../casl/casl-ability.factory';
+import { User } from 'src/modules/users/entities/user.entity';
 
 @Controller()
 export class LoginController {
-  constructor(private loginService: LoginService) {}
+  constructor(
+    private loginService: LoginService,
+    private readonly caslAbilityFactory: CaslAbilityFactory,
+  ) {}
 
   @UseGuards(LocalAuthGuard)
   @NoAuth()
@@ -18,8 +28,11 @@ export class LoginController {
   }
 
   @Get('profile')
-  @CheckPermissions([Action.CREATE, Subject.USER])
-  getProfile(@Request() { user }) {
+  async getProfile(@Request() { user }) {
+    const ability = await this.caslAbilityFactory.createForUser(user);
+    if (!ability.can(Action.READ, user)) {
+      throw new ForbiddenException('You dont have access to this resource!');
+    }
     return user;
   }
 }
