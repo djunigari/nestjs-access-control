@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { CheckPermissions } from 'src/modules/auth/guards/permissions.decorator';
 import { ICreatePermissionDto } from '../dto/create-permission.dto';

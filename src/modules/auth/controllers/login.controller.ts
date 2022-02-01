@@ -8,10 +8,9 @@ import {
 } from '@nestjs/common';
 import { LoginService } from '../services/Login.service';
 import { LocalAuthGuard } from '../Guards/local-auth.guard';
-import { Action } from 'src/modules/permissions/entities/actions.enum';
 import { NoAuth } from '../Guards/noauth.decorator';
 import { CaslAbilityFactory } from '../casl/casl-ability.factory';
-import { User } from 'src/modules/users/entities/user.entity';
+import { Action } from 'src/modules/permissions/entities/actions.enum';
 
 @Controller()
 export class LoginController {
